@@ -1,6 +1,6 @@
 # 💬 Gemini Chat CLI
 
-This is a command-line interface (CLI) for chatting with Google's Gemini models directly from your terminal. The project is in active development. Stay tuned for future features!
+This is a command-line interface (CLI) for chatting with Google's Gemini models directly from your terminal. **The application now supports conversational history and streaming output.** The project is in active development. Stay tuned for future features!
 
 ---
 
@@ -11,6 +11,7 @@ Before you begin, ensure you have the following:
 * **Python 3.9+**
 * An active internet connection
 * **A Google Gemini API Key:** You can get one from [Google AI Studio](https://aistudio.google.com/app/apikey).
+* **The requirements.txt file** (included in the repository)
 
 ---
 
@@ -33,7 +34,6 @@ Follow these steps exactly as run in your terminal:
     ```bash
     python3 -m venv venv
     ```
-    *(On some Windows systems, you might need to use `python` instead of `python3`)*
 
 4.  **Activate the virtual environment:**
 
@@ -47,11 +47,12 @@ Follow these steps exactly as run in your terminal:
         ```
     *(Your terminal prompt should now start with `(venv)`)*
 
-5.  **Install the Google GenAI SDK:**
+5.  **Install the required dependencies:**
+    This command reads the `requirements.txt` file to install the Google GenAI SDK.
     ```bash
-    pip install google-genai
+    pip install -r requirements.txt
     ```
-    *(Note: If you get a timeout error, use `pip install --timeout 600 google-genai`)*
+    *(Note: If you get a timeout error, use `pip install --timeout 600 -r requirements.txt`)*
 
 6.  **Set up your API Key:**
     You must set your Gemini API key as an environment variable.
@@ -74,7 +75,7 @@ Follow these steps exactly as run in your terminal:
 
 ## 🚀 How to Use
 
-Once your environment is activated (`(venv)`) and the API key is set, simply run the script:
+Once your environment is activated (`(venv)`) and the API key is set, simply run the script. The model will **stream its response** and **remember your previous questions** in the same session.
 
 ```bash
 python gemini_chat.py
