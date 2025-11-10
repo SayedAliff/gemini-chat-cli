@@ -29,6 +29,8 @@ class GeminiChat:
         # --- STATE VARIABLES ---
         self.generated_image_data = None 
         self.tk_image = None
+        # CRITICAL FIX: List to hold permanent references to images
+        self.image_references = [] 
         
         # --- INITIALIZATION LOGIC ---
         self.args = self._get_args() 
@@ -63,7 +65,6 @@ class GeminiChat:
         self.logo_label.grid(row=0, column=0, columnspan=2, pady=(10, 0), sticky="n") 
         
         # 2. Output/Display Area (Scrolled Text) - Row 1 (Text view)
-        # FIX APPLIED: Set background to reliable dark gray color
         self.chat_display = scrolledtext.ScrolledText(
             master, 
             wrap=tk.WORD, 
@@ -213,7 +214,7 @@ class GeminiChat:
         def download_and_display_task():
             """Function to run safely in a dedicated thread."""
             try:
-                # FIX: Increased timeout to 60 seconds
+                # 1. DOWNLOAD IMAGE (Heavy task)
                 response = requests.get(url, timeout=60) 
                 response.raise_for_status() 
                 
@@ -221,6 +222,7 @@ class GeminiChat:
                 img = Image.open(image_data)
                 self.generated_image_data = img 
                 
+                # Resize image
                 width, height = img.size
                 if width > 500:
                     new_width = 500
@@ -230,7 +232,7 @@ class GeminiChat:
                 ctk_image = ctk.CTkImage(light_image=img, dark_image=img, size=(new_width, new_height))
                 self.tk_image = ctk_image
                 
-                # Trigger SAFE GUI update on the main thread
+                # 2. Trigger SAFE GUI update on the main thread
                 self.master.after(0, self._show_image_on_gui, prompt_text)
 
             except requests.exceptions.RequestException as e:
@@ -249,8 +251,16 @@ class GeminiChat:
     def _show_image_on_gui(self, prompt_text):
         """Helper function to perform actual GUI update on the main thread."""
         try:
+            # FIX: Clear all text before switching to image view
+            self.chat_display.config(state='normal')
+            self.chat_display.delete('1.0', tk.END) 
+            self.chat_display.config(state='disabled')
+            
+            # CRITICAL FIX: Save the reference globally to prevent garbage collection
+            self.image_label.configure(image=self.tk_image, text="")
+            self.image_label.image = self.tk_image # Manually holding the reference
+
             self.chat_display.grid_remove() # Hide text display
-            self.image_label.configure(image=self.tk_image, text="") # Update CTkLabel with CTkImage
             self.image_frame.grid()       # Show image frame
             
             self.append_to_chat("Gemini", f"Image generated: {prompt_text}", is_image_request=True)
