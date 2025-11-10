@@ -126,12 +126,4 @@ This project is available under the MIT License. See `LICENSE` for details.
 * Theme switch (light/dark)
 * Optional local caching for images and tokens
 
----
 
-If you want, I can also:
-
-* generate a `setup.py` / `pyproject.toml` template,
-* create a simple `gui_chat.py` scaffold with OOP classes, or
-* prepare a `LICENSE` file (MIT) and a short CONTRIBUTING.md.
-
-Tell me which of those you'd like and I'll add them as files ready for GitHub.
