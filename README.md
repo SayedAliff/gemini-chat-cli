@@ -1,65 +1,68 @@
-# 💬 Gemini Chat GUI Application
+🤖 Terminal Guru Chat GUI Application
+This project is a sophisticated, fully object-oriented (OOP) chat client that utilizes the CustomTkinter library for a modern, dark-themed Graphical User Interface (GUI). It features the Terminal Guru persona and advanced multimedia capabilities.
 
-This project has evolved into a complete **Graphical User Interface (GUI)** application built with Python and Tkinter. It provides a full desktop chat client for interacting with Google's Gemini models.
+✨ Key Features
+Modern GUI: Clean, dark-themed interface built with CustomTkinter for superior aesthetics and stability.
 
-**Features Included:**
-* **GUI Interface:** Clean Tkinter window with streaming output.
-* **Conversational History:** Remembers past turns within the session.
-* **Customization:** Uses command-line arguments to set the model, temperature, and system role.
-* **Professional Code:** Structured using OOP (Object-Oriented Programming).
+Image Generation: Directly request and view generated images within the chat window, with a dedicated Download button.
 
----
+Streaming & Context: Supports live response streaming and maintains full conversation history.
 
-## 📋 Prerequisites
+Customization: Fully configurable via command-line arguments (Model, Temperature, System Role).
 
-* **Python 3.9+**
-* An active internet connection
-* **A Google Gemini API Key:** Required for all API calls. Get one from [Google AI Studio](https://aistudio.google.com/app/apikey).
+Professional Code: Structured using OOP in Python.
 
----
+📋 Prerequisites
+Python 3.9+
 
-## 🛠️ Installation & Setup
+An active internet connection
 
-1.  **Clone the repository:**
-    ```bash
-    git clone [https://github.com/SayedAliff/gemini-chat-cli.git](https://github.com/SayedAliff/gemini-chat-cli.git)
-    cd gemini-chat-cli
-    ```
-    *(Note: The main application file is now gui_chat.py)*
+A Google Gemini API Key (Required for all API calls). Get one from Google AI Studio.
 
-2.  **Create and activate a virtual environment:**
-    ```bash
-    python3 -m venv venv
-    source venv/bin/activate
-    ```
+The requirements.txt file (included in the repository).
 
-3.  **Install all required dependencies:**
-    This installs the Gemini SDK (`google-genai`), `Pillow` (for the logo/GUI), and `argparse`.
-    ```bash
-    pip install -r requirements.txt
-    ```
+🛠️ Installation & Setup
+Clone the repository:
 
-4.  **Set up your API Key (Mandatory):**
-    You must set your Gemini API key as an environment variable (`GEMINI_API_KEY`).
+Bash
+git clone https://github.com/SayedAliff/gemini-chat-cli.git
+cd gemini-chat-cli
+Create and activate a virtual environment:
 
-    * **macOS/Linux (.zshrc):**
-        ```bash
-        export GEMINI_API_KEY="YOUR_ACTUAL_API_KEY_HERE"
-        ```
-        Then, restart your terminal or run `source ~/.zshrc`.
-    * **Windows (Command Prompt):**
-        ```bash
-        setx GEMINI_API_KEY "YOUR_ACTUAL_API_KEY_HERE"
-        ```
-        Then, restart your terminal.
+Bash
+python3 -m venv venv
+source venv/bin/activate
+Install all required dependencies: This command installs google-genai, customtkinter, Pillow, and requests.
 
----
+Bash
+pip install -r requirements.txt
+Set up your API Key (Mandatory): The application reads the GEMINI_API_KEY environment variable.
 
-## 🚀 How to Run the GUI Application
+macOS/Linux (.zshrc):
 
+Bash
+export GEMINI_API_KEY="YOUR_ACTUAL_API_KEY_HERE"
+Then, restart your terminal or run source ~/.zshrc.
+
+Windows (Command Prompt):
+
+Bash
+setx GEMINI_API_KEY "YOUR_ACTUAL_API_KEY_HERE"
+Then, restart your terminal.
+
+🚀 How to Run the Application
 Run the main GUI script directly from your activated terminal.
 
-### Default Run (Fast Model):
+Default Run (Fast Model, Terminal Guru Persona):
 
-```bash
+Bash
 python gui_chat.py
+Advanced Run (Customizing Model and Creativity):
+
+Use flags to override the default settings:
+
+Flag	Example	Description
+-m / --model	-m pro	Uses the advanced gemini-2.5-pro model.
+-t / --temperature	-t 0.9	Sets creativity higher (0.0 to 1.0).
+-s / --system	-s 'Answer like a formal professor.'	Gives the AI a specific, customized role.
+Image Generation Test: Ask for an image: Generate a photorealistic image of a futuristic skyline.
