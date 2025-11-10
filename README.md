@@ -1,68 +1,137 @@
-🤖 Terminal Guru Chat GUI Application
-This project is a sophisticated, fully object-oriented (OOP) chat client that utilizes the CustomTkinter library for a modern, dark-themed Graphical User Interface (GUI). It features the Terminal Guru persona and advanced multimedia capabilities.
+# Gemini Chat CLI (Terminal Guru)
 
-✨ Key Features
-Modern GUI: Clean, dark-themed interface built with CustomTkinter for superior aesthetics and stability.
+A polished, object-oriented Python chat client with a sleek dark GUI built using **CustomTkinter**. Includes integrated image generation, streaming responses, conversation history, and CLI configuration. Perfect as a template to publish on GitHub.
 
-Image Generation: Directly request and view generated images within the chat window, with a dedicated Download button.
+---
 
-Streaming & Context: Supports live response streaming and maintains full conversation history.
+## ✨ Key Features
 
-Customization: Fully configurable via command-line arguments (Model, Temperature, System Role).
+* **Modern Dark GUI** — Built with CustomTkinter for a clean, stable, desktop look.
+* **Terminal Guru Persona** — A friendly, configurable system role that shapes assistant behavior.
+* **Image Generation** — Request generated images directly in the chat and download them with a single click.
+* **Streaming & Context** — Live response streaming and full conversation history are preserved.
+* **Configurable** — Command-line flags to set model, temperature, and system role.
+* **OOP Design** — Clear, modular object-oriented Python code for maintainability and reuse.
 
-Professional Code: Structured using OOP in Python.
+---
 
-📋 Prerequisites
-Python 3.9+
+## 🧩 Prerequisites
 
-An active internet connection
+* Python **3.9+**
+* Active internet connection
+* A **Google Gemini API Key** (from Google AI Studio)
+* `requirements.txt` included in the repo
 
-A Google Gemini API Key (Required for all API calls). Get one from Google AI Studio.
+---
 
-The requirements.txt file (included in the repository).
+## ⚙️ Installation
 
-🛠️ Installation & Setup
-Clone the repository:
-
-Bash
+```bash
+# Clone repository
 git clone https://github.com/SayedAliff/gemini-chat-cli.git
 cd gemini-chat-cli
-Create and activate a virtual environment:
 
-Bash
+# Create & activate virtual environment
 python3 -m venv venv
 source venv/bin/activate
-Install all required dependencies: This command installs google-genai, customtkinter, Pillow, and requests.
 
-Bash
+# Install dependencies
 pip install -r requirements.txt
-Set up your API Key (Mandatory): The application reads the GEMINI_API_KEY environment variable.
+```
 
-macOS/Linux (.zshrc):
+### Set the GEMINI API key
 
-Bash
+macOS / Linux (e.g. `~/.zshrc`):
+
+```bash
 export GEMINI_API_KEY="YOUR_ACTUAL_API_KEY_HERE"
-Then, restart your terminal or run source ~/.zshrc.
+# then: source ~/.zshrc
+```
 
 Windows (Command Prompt):
 
-Bash
+```cmd
 setx GEMINI_API_KEY "YOUR_ACTUAL_API_KEY_HERE"
-Then, restart your terminal.
+# then restart terminal
+```
 
-🚀 How to Run the Application
-Run the main GUI script directly from your activated terminal.
+---
 
-Default Run (Fast Model, Terminal Guru Persona):
+## 🚀 Running the App
 
-Bash
+Run the GUI directly from your activated environment:
+
+```bash
+# default run (fast model + Terminal Guru persona)
 python gui_chat.py
-Advanced Run (Customizing Model and Creativity):
+```
 
-Use flags to override the default settings:
+### Advanced (custom model / temperature / system role)
 
-Flag	Example	Description
--m / --model	-m pro	Uses the advanced gemini-2.5-pro model.
--t / --temperature	-t 0.9	Sets creativity higher (0.0 to 1.0).
--s / --system	-s 'Answer like a formal professor.'	Gives the AI a specific, customized role.
-Image Generation Test: Ask for an image: Generate a photorealistic image of a futuristic skyline.
+```bash
+python gui_chat.py --model pro --temperature 0.7 --system "Answer like a formal professor."
+```
+
+**Flags**
+
+* `-m`, `--model` — model name (e.g. `fast`, `pro`, `gemini-2.5-pro`)
+* `-t`, `--temperature` — creativity / randomness (0.0 — 1.0)
+* `-s`, `--system` — system role prompt (string)
+
+---
+
+## 🖼 Image Generation
+
+Ask the assistant to generate an image (e.g. `Generate a photorealistic image of a futuristic skyline`) and view it inline. A **Download** button saves the image locally.
+
+---
+
+## 🧭 Project Structure (example)
+
+```
+gemini-chat-cli/
+├─ gui_chat.py            # entrypoint (CustomTkinter GUI)
+├─ core/                  # OOP modules (client, model, image manager, ui components)
+├─ assets/                # icons, default images
+├─ requirements.txt
+└─ README.md
+```
+
+---
+
+## ✅ Notes & Tips
+
+* Ensure `GEMINI_API_KEY` is set before launching the app.
+* Use a virtualenv to avoid dependency conflicts.
+* For production or packaging, consider PyInstaller or creating a macOS app bundle.
+
+---
+
+## 🙌 Contributing
+
+Contributions, issues, and feature requests are welcome. Please open an issue or create a PR with a clear description of changes.
+
+---
+
+## 📝 License
+
+This project is available under the MIT License. See `LICENSE` for details.
+
+---
+
+## 📌 TODO / Future Improvements
+
+* Add unit tests and CI pipeline
+* Export/import conversation history
+* Theme switch (light/dark)
+* Optional local caching for images and tokens
+
+---
+
+If you want, I can also:
+
+* generate a `setup.py` / `pyproject.toml` template,
+* create a simple `gui_chat.py` scaffold with OOP classes, or
+* prepare a `LICENSE` file (MIT) and a short CONTRIBUTING.md.
+
+Tell me which of those you'd like and I'll add them as files ready for GitHub.

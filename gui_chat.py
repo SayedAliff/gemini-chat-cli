@@ -1,7 +1,7 @@
 import argparse
 import os
 import json
-import tkinter as tk # BASE Tkinter for ScrolledText, constants
+import tkinter as tk 
 from tkinter import scrolledtext, messagebox, filedialog
 from threading import Thread
 from google import genai
@@ -9,7 +9,7 @@ from PIL import Image, ImageTk
 from datetime import date 
 import requests 
 import io 
-import customtkinter as ctk # CustomTkinter (Main GUI Library)
+import customtkinter as ctk 
 
 # --- CONFIGURATION CONSTANTS ---
 MODEL_FLASH = 'gemini-2.5-flash'
@@ -18,7 +18,7 @@ FONT_SIZE = 14
 LOGO_FILENAME = "gemini_logo.png" 
 LOG_FILE_NAME = "chat_history.json" 
 COPYRIGHT_TEXT = f"Gemini Chat GUI | © {date.today().year} Sayed Aliff" 
-MODEL_ROLE_NAME = "Terminal Guru" # FINAL ROLE NAME
+MODEL_ROLE_NAME = "Terminal Guru" 
 
 class GeminiChat:
     
@@ -63,7 +63,7 @@ class GeminiChat:
         self.logo_label.grid(row=0, column=0, columnspan=2, pady=(10, 0), sticky="n") 
         
         # 2. Output/Display Area (Scrolled Text) - Row 1 (Text view)
-        # FIX APPLIED HERE: Setting background (bg) to a reliable dark gray color (#242424)
+        # FIX APPLIED: Set background to reliable dark gray color
         self.chat_display = scrolledtext.ScrolledText(
             master, 
             wrap=tk.WORD, 
@@ -205,7 +205,7 @@ class GeminiChat:
         thread = Thread(target=self.process_api_call, args=(prompt,))
         thread.start()
 
-    # --- IMAGE HANDLING LOGIC (Final Calibration) ---
+    # --- IMAGE HANDLING LOGIC (FINAL CALIBRATION) ---
 
     def _display_image_from_url(self, url, prompt_text):
         """Downloads the image from URL and displays it in the dedicated frame (called from background thread)."""
@@ -213,6 +213,7 @@ class GeminiChat:
         def download_and_display_task():
             """Function to run safely in a dedicated thread."""
             try:
+                # FIX: Increased timeout to 60 seconds
                 response = requests.get(url, timeout=60) 
                 response.raise_for_status() 
                 
@@ -229,6 +230,7 @@ class GeminiChat:
                 ctk_image = ctk.CTkImage(light_image=img, dark_image=img, size=(new_width, new_height))
                 self.tk_image = ctk_image
                 
+                # Trigger SAFE GUI update on the main thread
                 self.master.after(0, self._show_image_on_gui, prompt_text)
 
             except requests.exceptions.RequestException as e:
@@ -247,9 +249,9 @@ class GeminiChat:
     def _show_image_on_gui(self, prompt_text):
         """Helper function to perform actual GUI update on the main thread."""
         try:
-            self.chat_display.grid_remove() 
-            self.image_label.configure(image=self.tk_image, text="") 
-            self.image_frame.grid()       
+            self.chat_display.grid_remove() # Hide text display
+            self.image_label.configure(image=self.tk_image, text="") # Update CTkLabel with CTkImage
+            self.image_frame.grid()       # Show image frame
             
             self.append_to_chat("Gemini", f"Image generated: {prompt_text}", is_image_request=True)
             self.send_button.configure(state=tk.NORMAL)
