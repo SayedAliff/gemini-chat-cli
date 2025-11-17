@@ -24,13 +24,11 @@ class GeminiChat:
     
     def __init__(self, master):
         self.master = master
-        master.title("Gemini Chat GUI - CustomTkinter")
+        master.title("Terminal Guru - Gemini Chat Agent") 
         
         # --- STATE VARIABLES ---
         self.generated_image_data = None 
         self.tk_image = None
-        # CRITICAL FIX: List to hold permanent references to images
-        self.image_references = [] 
         
         # --- INITIALIZATION LOGIC ---
         self.args = self._get_args() 
@@ -59,23 +57,39 @@ class GeminiChat:
         # --- GUI SETUP ---
         master.grid_columnconfigure(0, weight=1)
         master.grid_rowconfigure(1, weight=1) 
-
-        # 1. Logo Display Area (Row 0)
-        self.logo_label = ctk.CTkLabel(master, text="") 
-        self.logo_label.grid(row=0, column=0, columnspan=2, pady=(10, 0), sticky="n") 
         
-        # 2. Output/Display Area (Scrolled Text) - Row 1 (Text view)
+        # 0. Top Bar Frame (Holds Logo and Theme Switch) - ROW 0
+        self.top_frame = ctk.CTkFrame(master)
+        self.top_frame.grid(row=0, column=0, columnspan=2, padx=10, pady=(10, 0), sticky="ew")
+        self.top_frame.grid_columnconfigure(1, weight=1) # Center column for logo
+
+        # 0a. Theme Switch Option Menu (Left side of Top Frame)
+        self.appearance_mode_label = ctk.CTkLabel(self.top_frame, text="Theme:")
+        self.appearance_mode_label.grid(row=0, column=0, padx=(10, 5), pady=5, sticky="w")
+        self.appearance_mode_optionemenu = ctk.CTkOptionMenu(
+            self.top_frame, 
+            values=["Dark", "Light", "System"],
+            command=self.change_appearance_mode_event
+        )
+        self.appearance_mode_optionemenu.set("Dark") # Default to Dark
+        self.appearance_mode_optionemenu.grid(row=0, column=2, padx=(5, 10), pady=5, sticky="e")
+
+        # 0b. Logo Display Area (Center of Top Frame)
+        self.logo_label = ctk.CTkLabel(self.top_frame, text="") 
+        self.logo_label.grid(row=0, column=1, pady=(10, 0), sticky="n") 
+        
+        # 1. Output/Display Area (Scrolled Text) - ROW 1
         self.chat_display = scrolledtext.ScrolledText(
             master, 
             wrap=tk.WORD, 
             state='disabled', 
             font=('Arial', FONT_SIZE), 
-            bg='#242424', 
-            fg='#DCE4EE' 
+            bg='#242424', # Dark Gray Background Fix
+            fg='#DCE4EE' # Light Text Color
         )
         self.chat_display.grid(row=1, column=0, columnspan=2, padx=10, pady=10, sticky="nsew")
 
-        # 3. Image Display Area (NEW FRAME) - Row 1 (Image view, initially hidden)
+        # 2. Image Display Area (NEW FRAME) - ROW 1
         self.image_frame = ctk.CTkFrame(master, border_width=2) 
         self.image_frame.grid(row=1, column=0, columnspan=2, padx=10, pady=10, sticky="nsew")
         self.image_frame.grid_remove() 
@@ -91,16 +105,16 @@ class GeminiChat:
         )
         self.download_button.pack(side=tk.BOTTOM, pady=10)
         
-        # 4. Input Field (Row 2)
+        # 3. Input Field (Row 2)
         self.input_field = ctk.CTkEntry(master, font=('Arial', FONT_SIZE)) 
         self.input_field.grid(row=2, column=0, padx=10, pady=(0, 10), sticky="ew")
         self.input_field.bind("<Return>", lambda event: self.send_message_thread())
         
-        # 5. Send Button (Row 2)
+        # 4. Send Button (Row 2)
         self.send_button = ctk.CTkButton(master, text="Send", command=self.send_message_thread, font=('Arial', 12)) 
         self.send_button.grid(row=2, column=1, padx=(0, 10), pady=(0, 10), sticky="e")
         
-        # 6. Footer/Copyright Label (Row 3)
+        # 5. Footer/Copyright Label (Row 3)
         self.footer_label = ctk.CTkLabel(master, text=COPYRIGHT_TEXT, font=('Arial', 8), text_color='gray') 
         self.footer_label.grid(row=3, column=0, columnspan=2, pady=(0, 5), sticky="s") 
         
@@ -108,6 +122,11 @@ class GeminiChat:
         self._load_logo()
         
         self.print_initial_info()
+
+    # --- NEW THEME METHOD ---
+    def change_appearance_mode_event(self, new_appearance_mode: str):
+        """Handler for the Theme Switch Option Menu."""
+        ctk.set_appearance_mode(new_appearance_mode)
 
     # --- CORE METHODS ---
 
@@ -209,12 +228,9 @@ class GeminiChat:
     # --- IMAGE HANDLING LOGIC (FINAL CALIBRATION) ---
 
     def _display_image_from_url(self, url, prompt_text):
-        """Downloads the image from URL and displays it in the dedicated frame (called from background thread)."""
         
         def download_and_display_task():
-            """Function to run safely in a dedicated thread."""
             try:
-                # 1. DOWNLOAD IMAGE (Heavy task)
                 response = requests.get(url, timeout=60) 
                 response.raise_for_status() 
                 
@@ -222,7 +238,6 @@ class GeminiChat:
                 img = Image.open(image_data)
                 self.generated_image_data = img 
                 
-                # Resize image
                 width, height = img.size
                 if width > 500:
                     new_width = 500
@@ -232,7 +247,6 @@ class GeminiChat:
                 ctk_image = ctk.CTkImage(light_image=img, dark_image=img, size=(new_width, new_height))
                 self.tk_image = ctk_image
                 
-                # 2. Trigger SAFE GUI update on the main thread
                 self.master.after(0, self._show_image_on_gui, prompt_text)
 
             except requests.exceptions.RequestException as e:
@@ -258,7 +272,7 @@ class GeminiChat:
             
             # CRITICAL FIX: Save the reference globally to prevent garbage collection
             self.image_label.configure(image=self.tk_image, text="")
-            self.image_label.image = self.tk_image # Manually holding the reference
+            self.image_label.image = self.tk_image 
 
             self.chat_display.grid_remove() # Hide text display
             self.image_frame.grid()       # Show image frame
@@ -373,7 +387,7 @@ def main():
     ctk.set_appearance_mode("Dark") 
     ctk.set_default_color_theme("blue")
     
-    root = ctk.CTk() # Use CTk for the root window
+    root = ctk.CTk() 
     app = GeminiChat(root)
     
     # Configure colors/tags
